@@ -1,11 +1,14 @@
 package co.juanxxo.juntaAnomalies.anomalies;
 
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
+import org.bukkit.block.Block;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class AnomaliesListener implements Listener {
@@ -49,5 +52,63 @@ public class AnomaliesListener implements Listener {
         player.addPotionEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.POISON, 60, 0));
     }
 
+
+    //Arañas generan telarañas en los pies
+    @EventHandler
+    public void onSpiderAttackPlayer(EntityDamageByEntityEvent event) {
+
+        EntityType damagerType = event.getDamager().getType();
+        if (damagerType != EntityType.SPIDER &&
+                damagerType != EntityType.CAVE_SPIDER) {
+            return;
+        }
+
+        if (!(event.getEntity() instanceof Player player)) return;
+
+        Block block = player.getLocation().getBlock();
+
+        if(Math.random() > 0.5) return;
+
+        if (block.getType() == Material.AIR) {
+            block.setType(Material.COBWEB);
+        }
+    }
+
+    //Altohornos explotan al interactuar
+    @EventHandler
+    public void onBlastFurnaceInteract(PlayerInteractEvent event) {
+
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+
+        Block block = event.getClickedBlock();
+        if (block == null) return;
+
+        if (block.getType() != Material.BLAST_FURNACE) return;
+
+        Player player = event.getPlayer();
+
+        event.setCancelled(true);
+
+        block.setType(Material.AIR);
+
+        block.getWorld().createExplosion(
+                block.getLocation().add(0.5, 0.5, 0.5),
+                2.0F,   // potencia
+                false,  // no prende fuego
+                true,   // rompe bloques
+                player  // responsable
+        );
+    }
+
+    //Triple ahogamiento
+    @EventHandler
+    public void onPlayerDrown(EntityDamageEvent event) {
+
+        if (!(event.getEntity() instanceof Player)) return;
+
+        if (event.getCause() != EntityDamageEvent.DamageCause.DROWNING) return;
+
+        event.setDamage(event.getDamage() * 3);
+    }
 
 }
