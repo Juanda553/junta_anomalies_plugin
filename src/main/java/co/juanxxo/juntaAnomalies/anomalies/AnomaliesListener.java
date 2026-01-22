@@ -47,6 +47,18 @@ public class AnomaliesListener implements Listener {
         event.getBlock().getWorld().spawn(event.getBlock().getLocation(), org.bukkit.entity.CaveSpider.class);
     }
 
+    // ROMPER DIAMANTE o DEEPSLATE_DIAMOND APLICA VENENO
+    @EventHandler
+    public void onPlayerBreakDiamond(BlockBreakEvent event) {
+        Material type = event.getBlock().getType();
+        if (type != Material.DIAMOND_ORE && type != Material.DEEPSLATE_DIAMOND_ORE) return;
+        Player player = event.getPlayer();
+        if (player.hasPotionEffect(org.bukkit.potion.PotionEffectType.POISON)) return;
+
+        if (Math.random() > 0.3) return; // 30% de probabilidad
+        player.addPotionEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.POISON, 60, 0));
+    }
+
 
     //Arañas generan telarañas en los pies
     @EventHandler
