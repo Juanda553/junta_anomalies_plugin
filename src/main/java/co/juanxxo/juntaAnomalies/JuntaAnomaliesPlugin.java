@@ -1,7 +1,6 @@
 package co.juanxxo.juntaAnomalies;
 
-import co.juanxxo.juntaAnomalies.anomalies.AnomaliesListener;
-import co.juanxxo.juntaAnomalies.anomalies.ZombieOfDeathPlayer;
+import co.juanxxo.juntaAnomalies.anomalies.*;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -12,7 +11,15 @@ public final class JuntaAnomaliesPlugin extends JavaPlugin {
         // REGISTRAR ANOMALÍAS
         // USAR anomaly(new ClaseDeLaAnomalia()) PARA REGISTRAR CADA ANOMALÍA
 
-        anomaly(new AnomaliesListener());
+        anomaly(new BlastfurnaceExplosive());
+        anomaly(new BreakCobwebThreeSpider());
+        anomaly(new DiamondOrePoisoned());
+        anomaly(new DrownedBuff());
+        anomaly(new ExplosiveBeds());
+        anomaly(new HoldHotItems());
+        anomaly(new MortalButton());
+        anomaly(new SpiderAttackPutCobweb());
+        anomaly(new ZombieDiamondSpawn());
         anomaly(new ZombieOfDeathPlayer());
 
         ////////////////////////////////////////////
