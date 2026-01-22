@@ -7,9 +7,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.EnumSet;
+import java.util.Set;
 
 public class AnomaliesListener implements Listener {
     final boolean ENABLE_BUTTON_KILL = true;
@@ -111,4 +118,74 @@ public class AnomaliesListener implements Listener {
         event.setDamage(event.getDamage() * 3);
     }
 
+    //Materiales calientes queman
+    @EventHandler
+    public void onHoldHotItem(PlayerItemHeldEvent event) {
+
+        Set<Material> HOT_ITEMS = EnumSet.of(
+                Material.LAVA_BUCKET,
+                Material.MAGMA_BLOCK,
+                Material.BLAZE_ROD,
+                Material.FIRE_CHARGE,
+                Material.CAMPFIRE,
+                Material.MAGMA_CREAM,
+                Material.BLAZE_POWDER);
+
+        Player player = event.getPlayer();
+
+        ItemStack item = player.getInventory().getItem(event.getNewSlot());
+        if (item == null) return;
+
+        if (!HOT_ITEMS.contains(item.getType())) return;
+
+        player.setFireTicks(60);
+    }
+
+    //Camas explotan en el overworld
+    @EventHandler
+    public void onBedExplodes(PlayerInteractEvent event) {
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+
+        Block block = event.getClickedBlock();
+        if (block == null) return;
+
+        if (!block.getType().name().contains("BED")) return;
+
+        Player player = event.getPlayer();
+
+        event.setCancelled(true);
+
+        block.setType(Material.AIR);
+
+        block.getWorld().createExplosion(
+                block.getLocation().add(0.5, 0.5, 0.5),
+                2.0F,   // potencia
+                false,  // no prende fuego
+                true,   // rompe bloques
+                player  // responsable
+        );
+    }
+
+    //Zombies spawnean full diamond (40% de probabilidad)
+    @EventHandler
+    public void onZombieDiamondArmorSpawn(CreatureSpawnEvent event) {
+
+        if (event.getEntityType() != EntityType.ZOMBIE) return;
+
+        if (Math.random() > 0.4) return;
+
+        Zombie zombie = (Zombie) event.getEntity();
+        EntityEquipment eq = zombie.getEquipment();
+        if (eq == null) return;
+
+        eq.setHelmet(new ItemStack(Material.DIAMOND_HELMET));
+        eq.setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
+        eq.setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
+        eq.setBoots(new ItemStack(Material.DIAMOND_BOOTS));
+
+        eq.setHelmetDropChance(0f);
+        eq.setChestplateDropChance(0f);
+        eq.setLeggingsDropChance(0f);
+        eq.setBootsDropChance(0f);
+    }
 }
