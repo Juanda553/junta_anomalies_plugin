@@ -7,10 +7,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.EnumSet;
@@ -135,7 +137,7 @@ public class AnomaliesListener implements Listener {
         Block block = event.getClickedBlock();
         if (block == null) return;
 
-        if (block.getType().name().contains("BED")) return;
+        if (!block.getType().name().contains("BED")) return;
 
         Player player = event.getPlayer();
 
@@ -152,4 +154,26 @@ public class AnomaliesListener implements Listener {
         );
     }
 
+    //Zombies spawnean full diamond (40% de probabilidad)
+    @EventHandler
+    public void onZombieDiamondArmorSpawn(CreatureSpawnEvent event) {
+
+        if (event.getEntityType() != EntityType.ZOMBIE) return;
+
+        if (Math.random() > 0.4) return;
+
+        Zombie zombie = (Zombie) event.getEntity();
+        EntityEquipment eq = zombie.getEquipment();
+        if (eq == null) return;
+
+        eq.setHelmet(new ItemStack(Material.DIAMOND_HELMET));
+        eq.setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
+        eq.setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
+        eq.setBoots(new ItemStack(Material.DIAMOND_BOOTS));
+
+        eq.setHelmetDropChance(0f);
+        eq.setChestplateDropChance(0f);
+        eq.setLeggingsDropChance(0f);
+        eq.setBootsDropChance(0f);
+    }
 }
