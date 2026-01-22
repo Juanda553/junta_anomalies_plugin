@@ -10,6 +10,11 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.EnumSet;
+import java.util.Set;
 
 public class AnomaliesListener implements Listener {
     final boolean ENABLE_BUTTON_KILL = true;
@@ -99,4 +104,26 @@ public class AnomaliesListener implements Listener {
         event.setDamage(event.getDamage() * 3);
     }
 
+    //Materiales calientes queman
+    @EventHandler
+    public void onHoldHotItem(PlayerItemHeldEvent event) {
+
+        Set<Material> HOT_ITEMS = EnumSet.of(
+                Material.LAVA_BUCKET,
+                Material.MAGMA_BLOCK,
+                Material.BLAZE_ROD,
+                Material.FIRE_CHARGE,
+                Material.CAMPFIRE,
+                Material.MAGMA_CREAM,
+                Material.BLAZE_POWDER);
+
+        Player player = event.getPlayer();
+
+        ItemStack item = player.getInventory().getItem(event.getNewSlot());
+        if (item == null) return;
+
+        if (!HOT_ITEMS.contains(item.getType())) return;
+
+        player.setFireTicks(60);
+    }
 }
