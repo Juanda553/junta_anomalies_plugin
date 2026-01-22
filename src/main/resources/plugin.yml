@@ -1,0 +1,6 @@
+name: JuntaAnomaliesPlugin
+version: '1.0'
+main: co.juanxxo.juntaAnomalies.JuntaAnomaliesPlugin
+api-version: '1.21'
+authors: [ JuanDa553 ]
+description: Plugin de control de anomalias en La Junta
