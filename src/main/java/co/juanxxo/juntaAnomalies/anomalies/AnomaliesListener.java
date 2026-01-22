@@ -39,8 +39,9 @@ public class AnomaliesListener implements Listener {
         event.getBlock().getWorld().spawn(event.getBlock().getLocation(), org.bukkit.entity.CaveSpider.class);
     }
 
-    @EventHandler
+
     //Arañas generan telarañas en los pies
+    @EventHandler
     public void onSpiderAttackPlayer(EntityDamageByEntityEvent event) {
 
         EntityType damagerType = event.getDamager().getType();
@@ -60,4 +61,33 @@ public class AnomaliesListener implements Listener {
         }
     }
 
+    //Altohornos explotan al interactuar
+    @EventHandler
+    public void onBlastFurnaceInteract(PlayerInteractEvent event) {
+
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+
+        Block block = event.getClickedBlock();
+        if (block == null) return;
+
+
+        if (block.getType() != Material.BLAST_FURNACE) return;
+
+        Player player = event.getPlayer();
+
+
+        event.setCancelled(true);
+
+
+        block.setType(Material.AIR);
+
+
+        block.getWorld().createExplosion(
+                block.getLocation().add(0.5, 0.5, 0.5),
+                2.0F,   // potencia
+                false,  // no prende fuego
+                true,   // rompe bloques
+                player  // responsable
+        );
+    }
 }
