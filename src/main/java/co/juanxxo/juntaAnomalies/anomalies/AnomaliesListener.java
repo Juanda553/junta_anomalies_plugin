@@ -1,11 +1,13 @@
 package co.juanxxo.juntaAnomalies.anomalies;
 
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
+import org.bukkit.block.Block;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class AnomaliesListener implements Listener {
@@ -37,5 +39,25 @@ public class AnomaliesListener implements Listener {
         event.getBlock().getWorld().spawn(event.getBlock().getLocation(), org.bukkit.entity.CaveSpider.class);
     }
 
+    @EventHandler
+    //Arañas generan telarañas en los pies
+    public void onSpiderAttackPlayer(EntityDamageByEntityEvent event) {
+
+        EntityType damagerType = event.getDamager().getType();
+        if (damagerType != EntityType.SPIDER &&
+                damagerType != EntityType.CAVE_SPIDER) {
+            return;
+        }
+
+        if (!(event.getEntity() instanceof Player player)) return;
+
+        Block block = player.getLocation().getBlock();
+
+        if(Math.random() > 0.5) return;
+
+        if (block.getType() == Material.AIR) {
+            block.setType(Material.COBWEB);
+        }
+    }
 
 }
