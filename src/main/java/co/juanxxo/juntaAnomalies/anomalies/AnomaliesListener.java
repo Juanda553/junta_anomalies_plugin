@@ -126,4 +126,30 @@ public class AnomaliesListener implements Listener {
 
         player.setFireTicks(60);
     }
+
+    //Camas explotan en el overworld
+    @EventHandler
+    public void onBedExplodes(PlayerInteractEvent event) {
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+
+        Block block = event.getClickedBlock();
+        if (block == null) return;
+
+        if (block.getType().name().contains("BED")) return;
+
+        Player player = event.getPlayer();
+
+        event.setCancelled(true);
+
+        block.setType(Material.AIR);
+
+        block.getWorld().createExplosion(
+                block.getLocation().add(0.5, 0.5, 0.5),
+                2.0F,   // potencia
+                false,  // no prende fuego
+                true,   // rompe bloques
+                player  // responsable
+        );
+    }
+
 }
