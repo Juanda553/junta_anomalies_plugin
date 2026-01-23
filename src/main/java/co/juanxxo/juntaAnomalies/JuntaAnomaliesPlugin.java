@@ -1,5 +1,7 @@
 package co.juanxxo.juntaAnomalies;
 
+import co.juanxxo.juntaAnomalies.RepeatingAnomalies.CactusDamage;
+import co.juanxxo.juntaAnomalies.utils.RepeatingAnomaly;
 import co.juanxxo.juntaAnomalies.anomalies.*;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,6 +23,15 @@ public final class JuntaAnomaliesPlugin extends JavaPlugin {
         anomaly(new SpiderAttackPutCobweb());
         anomaly(new ZombieDiamondSpawn());
         anomaly(new ZombieOfDeathPlayer());
+        anomaly(new DuplicateFallDamage());
+        anomaly(new EnderPearlPoison());
+        anomaly(new CreeperCharged());
+
+        ////////////////////////////////////////////
+        // ANOMALIAS REPETITIVAS
+        ////////////////////////////////////////////
+
+        repeatingAnomaly(new CactusDamage());
 
         ////////////////////////////////////////////
         getLogger().info("Anomalías activadas");
@@ -33,5 +44,9 @@ public final class JuntaAnomaliesPlugin extends JavaPlugin {
 
     private void anomaly(Listener listener) {
         getServer().getPluginManager().registerEvents(listener, this);
+    }
+
+    private void repeatingAnomaly(RepeatingAnomaly anomaly) {
+        anomaly.start(this);
     }
 }
