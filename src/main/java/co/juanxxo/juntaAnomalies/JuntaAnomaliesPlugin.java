@@ -26,6 +26,7 @@ public final class JuntaAnomaliesPlugin extends JavaPlugin {
         anomaly(new DuplicateFallDamage());
         anomaly(new EnderPearlPoison());
         anomaly(new CreeperCharged());
+        anomaly(new FireEternity());
 
         ////////////////////////////////////////////
         // ANOMALIAS REPETITIVAS
