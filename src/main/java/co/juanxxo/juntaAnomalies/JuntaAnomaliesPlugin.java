@@ -31,6 +31,7 @@ public final class JuntaAnomaliesPlugin extends JavaPlugin {
         anomaly(new LavaClearPotionEffects());
         anomaly(new SkeletonWitherChance());
         anomaly(new CactusDamageMultiplier());
+        anomaly(new DoorInstantKill());
 
         ////////////////////////////////////////////
         // ANOMALIAS REPETITIVAS
