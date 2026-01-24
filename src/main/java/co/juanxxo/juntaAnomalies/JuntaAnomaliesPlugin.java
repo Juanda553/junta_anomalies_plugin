@@ -29,6 +29,7 @@ public final class JuntaAnomaliesPlugin extends JavaPlugin {
         anomaly(new FireEternity());
         anomaly(new AncientDebrisExplosion());
         anomaly(new LavaClearPotionEffects());
+        anomaly(new SkeletonWitherChance());
 
         ////////////////////////////////////////////
         // ANOMALIAS REPETITIVAS
